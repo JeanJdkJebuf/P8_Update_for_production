@@ -6,7 +6,7 @@ python:
 install:
   - pip install pipenv
   - pipenv --python 3.6
-  - pipenv install
+  - pipenv install --dev
 
 branches:
   only:
@@ -20,4 +20,5 @@ services:
   - postgresql
 
 script:
-  - pipenv run python manage.py test
+  - pipenv run coverage run --source='.' manage.py test
+  - pipenv run coverage report
