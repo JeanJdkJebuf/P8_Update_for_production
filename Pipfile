@@ -13,6 +13,8 @@ psycopg2-binary = "*"
 django-extensions = "*"
 requests = "*"
 unidecode = "*"
+gunicorn = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.6"

@@ -21,18 +21,6 @@ def gettext_noop(s):
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("KEY_PROD")
-
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -49,6 +37,7 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     # Settings for current apps
     'django_extensions',
+    "gunicorn",
 ]
 
 
@@ -81,28 +70,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mydjango.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DB_NAME = os.environ.get("BDD")
-DB_USER = os.environ.get("USER")
-DB_PW = os.environ.get("PW_POSTGRES")
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': DB_NAME,
-        'USER': DB_USER,
-        'PASSWORD': DB_PW,
-        'HOST': '',
-        'PORT': '5432',
-    }
-}
-
-# Password validation
-# https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -140,11 +107,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATIC_URL = '/static/'
-
 # Constants required for populating database
 # Used in dbproducts/management/commands
+
 
 OPEN_FOOD_SITE = "https://fr.openfoodfacts.org/cgi/search.pl?"
 SITE_PARAMETERS = {'action' : 'process',
