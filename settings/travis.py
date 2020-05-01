@@ -10,3 +10,6 @@ DATABASES = {
         'PORT': '',
     },
 }
+
+SECRET_KEY = "123"
+
