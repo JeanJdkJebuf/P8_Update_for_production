@@ -27,6 +27,8 @@ MANIFEST
 
 # Production files
 settings/production.py
+*.production.py
+mydjango/settings/production.py
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

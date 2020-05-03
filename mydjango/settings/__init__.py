@@ -12,6 +12,18 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn="https://ce7ddc446aa64b728b81e6fa4feffae4@o386724.ingest.sentry.io/5221304",
+    integrations=[DjangoIntegration()],
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
+
 # This is defined here as a do-nothing function because we can't import
 # django.utils.translation -- that module depends on the settings.
 def gettext_noop(s):
@@ -19,8 +31,6 @@ def gettext_noop(s):
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -34,7 +44,6 @@ INSTALLED_APPS = [
     'favorites.apps.FavoritesConfig',
     'dbproducts.apps.DbproductsConfig',
     'main.apps.MainConfig',
-    # Settings for current apps
     'django_extensions',
     "gunicorn",
 ]
@@ -118,7 +127,7 @@ SITE_PARAMETERS = {'action' : 'process',
                    'tagtype_0' : 'categories',
                    'tag_contains_0' : 'contains',
                    # 'tag_0' : 'pizza',
-                   'page_size' : '500',
+                   'page_size' : '1000',
                    'page' : '1',
                    'json' : 1,
                   }
@@ -132,7 +141,9 @@ PROD_CATEGORIES = ["viande",
                    "fromage",
                    "dessert",
                    "yaourt",
-                   "boisson"
+                   "boisson",
+                   "biscuit",
+                   "légumes",
                   ]
 
 # Adding line below for application 'users'
