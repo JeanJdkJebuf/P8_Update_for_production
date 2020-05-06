@@ -1,0 +1,22 @@
+dist: bionic
+language: python
+
+python:
+  - '3.6'
+install:
+  - pip install pipenv
+  - pipenv --python 3.6
+  - pipenv install
+
+branches:
+  only:
+    - staging
+env:
+  global:
+    - DJANGO_SETTINGS_MODULE="mydjango.settings.travis"
+
+services:
+  - postgresql
+
+script:
+  - pipenv run python manage.py test

@@ -5,6 +5,8 @@ from django.conf import settings
 import requests
 from dbproducts.models import Category, Product
 
+# Adding event catcher for sentry_sdk
+from sentry_sdk import capture_message
 from dbproducts.related_functions import symbol_removal
 
 class Command(BaseCommand):
@@ -78,14 +80,14 @@ class Command(BaseCommand):
             # Inserting product into Products table
             for info_product in self.informations_gathered:
                 try:
-                    add_prod = Product.objects.create(id=info_product[0],
-                                                      product_name=info_product[1],
-                                                      img_front_url=info_product[2],
-                                                      nutri_grade=info_product[3],
-                                                      img_nutrition_url=info_product[4],
-                                                      web_link=info_product[5],
-                                                     )
-
+                    add_prod, created = Product.objects.update_or_create(id=info_product[0],
+                                                                         defaults={"product_name":info_product[1],
+                                                                                   "img_front_url":info_product[2],
+                                                                                   "nutri_grade":info_product[3],
+                                                                                   "img_nutrition_url":info_product[4],
+                                                                                   "web_link":info_product[5],
+                                                                                  }
+                                                                        )
                     marker += 1
                     if marker == show_five_hundred:
                         print("{} insertions into database so far".format(show_five_hundred))
@@ -95,11 +97,9 @@ class Command(BaseCommand):
                         # Creating a var without symbols, converted for
                         # SQL policy
                         sub_category = symbol_removal(num_sub_categories)
-
-                        if sub_category in sub_cat:
+                        try:
                             add_sub_cat = Category.objects.get(name=sub_category)
-                        else:
-                            sub_cat.append(sub_category)
+                        except Category.DoesNotExist:
                             add_sub_cat = Category.objects.create(name=sub_category)
                         #Adding many to many relation between product and category
                         add_prod.categories.add(add_sub_cat)
@@ -110,6 +110,7 @@ class Command(BaseCommand):
                 except FieldError:
                     print("The information you are trying to enter \
                          into the database has incorrect values")
+            capture_message("{} products correctly updated".format(marker))
         # Running all functions wrote in "handle" Command function
         gather_informations()
         populating_db()
