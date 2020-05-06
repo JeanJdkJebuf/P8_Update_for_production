@@ -26,9 +26,9 @@ wheels/
 MANIFEST
 
 # Production files
-settings/production.py
 *.production.py
-mydjango/settings/production.py
+*.crontab_run.sh
+crontab_run.sh
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

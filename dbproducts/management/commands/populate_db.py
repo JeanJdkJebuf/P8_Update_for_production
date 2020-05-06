@@ -5,6 +5,8 @@ from django.conf import settings
 import requests
 from dbproducts.models import Category, Product
 
+# Adding event catcher for sentry_sdk
+from sentry_sdk import capture_message
 from dbproducts.related_functions import symbol_removal
 
 class Command(BaseCommand):
@@ -108,6 +110,7 @@ class Command(BaseCommand):
                 except FieldError:
                     print("The information you are trying to enter \
                          into the database has incorrect values")
+            capture_message("{} products correctly updated".format(marker))
         # Running all functions wrote in "handle" Command function
         gather_informations()
         populating_db()
